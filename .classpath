@@ -8,6 +8,5 @@
 	<classpathentry kind="lib" path="libs/joscar-common.jar" sourcepath="/Users/voloshyn/joscar-read-only"/>
 	<classpathentry kind="lib" path="libs/joscar-protocol.jar" sourcepath="/Users/voloshyn/joscar-read-only"/>
 	<classpathentry kind="lib" path="libs/joscar-client.jar" sourcepath="/Users/voloshyn/joscar-read-only"/>
-	<classpathentry kind="lib" path="libs/GoogleAdMobAdsSdk-4.1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
