@@ -3,9 +3,7 @@ package com.volnatech.dolca;
 import java.io.*;
 
 public class Account implements Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	private String serverAddress = null;
 	private int serverPort = 0;
