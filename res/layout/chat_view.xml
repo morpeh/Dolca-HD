@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent" android:layout_height="match_parent">
+	<TableLayout android:layout_height="match_parent"
+		android:id="@+id/tableLayout1" android:layout_width="match_parent">
+		<TableRow android:layout_height="0px" android:layout_weight="1.0"
+			android:id="@+id/tableRow1" android:layout_width="fill_parent">
+			<ListView android:layout_weight="1.0" android:id="@+id/chat_list_view"
+				android:text="" android:layout_height="fill_parent"
+				android:layout_width="0px"></ListView>
+		</TableRow>
+		<TableRow android:id="@+id/tableRow2" android:layout_width="fill_parent"
+			android:layout_height="wrap_content">
+			<EditText android:hint="@string/type_to_compose_hint"
+				android:text="" android:id="@+id/message_edit_view"
+				android:layout_width="0px" android:layout_weight="1.0"
+				android:layout_height="wrap_content"></EditText>
+		</TableRow>
+	</TableLayout>
+
+</FrameLayout>    

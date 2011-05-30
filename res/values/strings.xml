@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_desc">Dolca is a multi-account instant messaging application for Android tablets</string>
+    <string name="app_name">Dolca HD</string>
+    <string name="account_list">Accounts</string>
+    <string name="add_account">Add new account</string>
+    <string name="email">Email</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="service">Service</string>
+    <string name="type_to_compose_hint">Type here...</string>
+    <string name="remote_service_started">Dolca remote service started</string>
+    <string name="remote_service_stopped">Dolca remote service stopped</string>
+    <string name="remote_service_connected">Dolca remote service connected</string>
+    <string name="remote_service_disconnected">Dolca remote service disconnected</string>
+    <string name="quit_app_hint">You will be signed out from messenger.\nTo leave application running in background press "Home" button</string>
+    <string name="quit_app_hint_title">Are you sure you want to quit Dolca?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    
+    <string-array name="service_array">
+        <item>Google Talk</item>
+        <item>MSN</item>
+        <item>AIM</item>
+        <item>ICQ</item>
+    </string-array>
+        <string name="add">Add account</string>
+</resources>
