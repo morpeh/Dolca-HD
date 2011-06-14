@@ -23,6 +23,7 @@
         <item>MSN</item>
         <item>AIM</item>
         <item>ICQ</item>
+        <item>Facebook</item>
     </string-array>
         <string name="add">Add account</string>
 </resources>
