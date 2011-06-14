@@ -23,6 +23,21 @@ package com.volnatech.dolca;
 
 import java.io.IOException;
 
+import org.jivesoftware.smack.ConnectionConfiguration;
+import org.jivesoftware.smack.ConnectionConfiguration.SecurityMode;
+import org.jivesoftware.smack.ConnectionListener;
+import org.jivesoftware.smack.Roster;
+import org.jivesoftware.smack.SASLAuthentication;
+import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.provider.ProviderManager;
+import org.jivesoftware.smack.sasl.SASLDigestMD5Mechanism;
+import org.jivesoftware.smackx.packet.VCard;
+import org.jivesoftware.smackx.provider.VCardProvider;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 public class FacebookAccount extends XMPPAccount {
 	/**
 	 * 
@@ -32,13 +47,13 @@ public class FacebookAccount extends XMPPAccount {
 	FacebookAccount(){
 		this.setServerAddress("chat.facebook.com");
 		this.setServerPort(5222);
-		this.setService(null);
+		this.setService("chat.facebook.com");
 	}
 	
 	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
 		this.setServerAddress("chat.facebook.com");
 		this.setServerPort(5222);
-		this.setService(null);
+		this.setService("chat.facebook.com");
 	}
 	
 	@Override
@@ -48,4 +63,106 @@ public class FacebookAccount extends XMPPAccount {
 		userName = userName + "@chat.facebook.com"; 
 		super.setUserName(userName);
 	}
+	
+	@Override public boolean connect(AccountLoginListener loginListener){
+		final XMPPAccount self = this;
+		this.loginListener = loginListener;
+		ConnectionConfiguration config = new ConnectionConfiguration(self.getServerAddress(), self.getServerPort(), self.getService());
+		config.setSecurityMode(SecurityMode.disabled);
+		SASLAuthentication.registerSASLMechanism("DIGEST-MD5", SASLDigestMD5Mechanism.class);
+		SASLAuthentication.supportSASLMechanism("DIGEST-MD5", 0);
+		
+		config.setSASLAuthenticationEnabled(true);
+		try {
+
+			ProviderManager pm = ProviderManager.getInstance();
+			pm.addIQProvider("vCard","vcard-temp", new VCardProvider());
+
+			connection = new XMPPConnection(config);
+			connection.connect();
+			connection.login(self.getUserName(), self.getPassword());
+			isOnline = true;
+			this.loginListener.loginDidSucceeded();
+			Roster roster = connection.getRoster();
+			accountListener.accountDidLogin(this);
+			connection.getChatManager().addChatListener(chatListener);
+
+			new Thread(new Runnable() {
+
+				public void run() {
+					try {
+						VCard vcard = new VCard();
+						vcard.load(connection);
+						byte[] avatarBytes = vcard.getAvatar();
+						if (avatarBytes!=null)
+						{
+							Bitmap bitmap = BitmapFactory.decodeByteArray(avatarBytes, 0, avatarBytes.length);
+							FacebookAccount.this.getSelfAsFriend().setAvatar(bitmap);
+						}
+						String firstName = vcard.getFirstName();
+						String lastName = vcard.getLastName();
+						String name = null;
+						if (firstName!=null)
+							name = firstName;
+						if (lastName!=null)
+							if (name == null)
+								name = lastName;
+							else
+								name = name + " " + lastName;
+						if (name == null)
+							name = vcard.getNickName();
+						FacebookAccount.this.setName(name);
+					} catch (Exception e) {
+					}	    
+				}
+			}).start();
+
+
+
+			new Thread(new Runnable() {
+				public void run() {
+					getFriendList();
+				}
+			}).start();
+			roster.addRosterListener(rosterListener);
+			
+			connection.addConnectionListener(new ConnectionListener() {
+				
+				public void reconnectionSuccessful() {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				public void reconnectionFailed(Exception e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				public void reconnectingIn(int seconds) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				public void connectionClosedOnError(Exception e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				public void connectionClosed() {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+			
+		} catch (XMPPException e) {
+			this.loginListener.loginDidFailedWithError(e.getLocalizedMessage()!=null?e.getLocalizedMessage():e.toString());
+			return false;
+		} catch (Exception e){
+			this.loginListener.loginDidFailedWithError(e.getLocalizedMessage()!=null?e.getLocalizedMessage():e.toString());
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
 }

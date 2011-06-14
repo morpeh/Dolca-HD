@@ -239,6 +239,7 @@ public class MessengerService extends Service {
 				case 1: account = new MSNAccount(); break;
 				case 2: account = new AIMAccount(); break;
 				case 3: account = new ICQAccount(); break;
+				case 4: account = new FacebookAccount(); break;
 				}
 				account.setUserName(userName);
 				account.setPassword(password);
